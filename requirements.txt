@@ -1,0 +1,2 @@
+pymupdf==2.0
+flask==3.1.3

@@ -1,0 +1,40 @@
+# Componder Report Branding
+
+Swaps the partner lab's header and footer on report PDFs for Componder branding.
+The report body, signatures and QR code are left untouched.
+
+## Run
+
+```
+.venv/bin/python app.py        # then open http://127.0.0.1:5050
+```
+
+First-time setup on a new machine:
+
+```
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+```
+
+Command line, one file: `.venv/bin/python rebrand.py input.pdf [output.pdf]`
+
+## How it works
+
+1. Finds the header band (everything above the "Patient Name" line) and the
+   footer band (everything below the rule under the signatures).
+2. Redacts both bands, which really deletes the old text, logos and lines
+   instead of hiding them under a white box.
+3. Draws the Componder logo, the "LABORATORY TEST REPORT" band and the company footer.
+   The lab's clinical notes ("electronically authenticated… printed date", "NOTE : Assay
+   results…") are carried over word for word. The lab's "Processed at…" address line
+   and anything naming the lab are dropped.
+4. Integrity check: every word, image and drawing in the body is compared with
+   the original. If anything differs, the file is rejected instead of produced.
+
+Works with both the plain and the Clinova-letterhead versions of the report.
+If a PDF has a layout it doesn't recognise, it refuses the file instead of guessing.
+
+## Branding
+
+- Logo: `assets/logo.png`. Replace it with a high-res export (same proportions) for
+  sharper prints. The current one is cropped from a WhatsApp image.
+- Company name / address text: the `BRAND` dict at the top of `rebrand.py`.
