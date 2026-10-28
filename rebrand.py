@@ -35,12 +35,12 @@ LOGO_RECT = (388.3, 22.6, 570.3, 75.8)
 BAND_Y = (85.2, 98.4)
 BAND_TEXT_WIDTH = 190
 FOOTER_RULE_Y = 790.0
-NOTE_BASELINES = (797.2, 803.7)
-COMPANY_BASELINE = 815.5
-ADDRESS_BASELINE = 827.5
+NOTE_BASELINES = (797.2, 803.7, 810.8)
+COMPANY_BASELINE = 821.5
+ADDRESS_BASELINE = 831.5
 
-# Footer lines from the partner lab that are their branding, not clinical notes.
-DROP_FOOTER_LINES = ("Processed at", "Page ")
+# Lab footer lines we redraw ourselves instead of carrying over.
+DROP_FOOTER_LINES = ("Page ",)
 
 
 class LayoutError(Exception):
@@ -54,7 +54,7 @@ def _lines(page):
         for line in block["lines"]:
             text = "".join(s["text"] for s in line["spans"]).strip()
             if text:
-                yield pymupdf.Rect(line["bbox"]), text
+                yield pymupdf.Rect(line["bbox"]), text, line["spans"][0]["size"]
 
 
 def find_zones(page):
@@ -67,7 +67,7 @@ def find_zones(page):
     w, h = page.rect.width, page.rect.height
 
     header_bottom = None
-    for rect, text in _lines(page):
+    for rect, text, _ in _lines(page):
         if text.startswith("Patient Name"):
             header_bottom = rect.y0 - 1
             break
@@ -81,7 +81,7 @@ def find_zones(page):
             footer_top = r.y0 - 3
             break
     if footer_top is None:
-        for rect, text in _lines(page):
+        for rect, text, _ in _lines(page):
             if rect.y0 > h * 0.85 and ("electronically authenticated" in text
                                        or text.startswith("Processed at")):
                 footer_top = min(footer_top or rect.y0, rect.y0) - 4
@@ -97,14 +97,14 @@ def find_zones(page):
 
 
 def footer_notes(page, footer):
-    """Clinical notes in the lab's footer (e.g. the authentication / NOTE lines),
-    carried over verbatim. Address lines and anything naming the lab are dropped."""
-    notes = [
-        text for rect, text in _lines(page)
-        if footer.contains(rect)
-        and not text.startswith(DROP_FOOTER_LINES)
-        and "clinova" not in text.lower()
-    ]
+    """The lab's footer lines (authentication, NOTE, "Processed at…" address),
+    as (text, font size), carried over verbatim. They identify the lab that did
+    the test, so they stay. Only the lab's own "Page X of Y" is dropped."""
+    notes = sorted(
+        (rect.y0, text, size) for rect, text, size in _lines(page)
+        if footer.contains(rect) and not text.startswith(DROP_FOOTER_LINES)
+    )
+    notes = [(text, size) for _, text, size in notes]
     if len(notes) > len(NOTE_BASELINES):
         raise LayoutError(f"page {page.number + 1}: unexpected footer text {notes}")
     return notes
@@ -181,15 +181,16 @@ def draw_header(page):
 def draw_footer(page, page_no, page_count, notes):
     w = page.rect.width
     page.draw_line((0, FOOTER_RULE_Y), (w, FOOTER_RULE_Y), color=GREY_LINE, width=1)
+    for (text, size), baseline in zip(notes, NOTE_BASELINES):
+        page.insert_text((26.5, baseline), text, fontname="helv",
+                         fontsize=min(size, 5.8), color=TEXT)
     size = 4.95
-    for text, baseline in zip(notes, NOTE_BASELINES):
-        page.insert_text((26.5, baseline), text, fontname="helv", fontsize=size, color=TEXT)
     label = f"Page {page_no} of {page_count}"
     lw = pymupdf.get_text_length(label, fontname="helv", fontsize=size)
     page.insert_text((w - 24 - lw, NOTE_BASELINES[0]), label, fontname="helv",
                      fontsize=size, color=TEXT)
-    _centered(page, BRAND["company"], COMPANY_BASELINE, "hebo", 9.6, TEXT, w - 60)
-    _centered(page, BRAND["address"], ADDRESS_BASELINE, "helv", 9.2, TEXT, w - 70)
+    _centered(page, BRAND["company"], COMPANY_BASELINE, "hebo", 9.0, TEXT, w - 60)
+    _centered(page, BRAND["address"], ADDRESS_BASELINE, "helv", 8.6, TEXT, w - 70)
 
 
 def rebrand(pdf_bytes):
@@ -248,7 +249,7 @@ def rebrand(pdf_bytes):
                     "output discarded"
                 )
         footer_text = " ".join(page.get_text("text", clip=zones[1]).split())
-        for note in notes:
+        for note, _ in notes:
             if " ".join(note.split()) not in footer_text:
                 raise LayoutError(f"page {page.number + 1}: footer note missing in output")
         report["words"] += len(before[0])

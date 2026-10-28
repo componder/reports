@@ -37,9 +37,10 @@ Command line, one file: `.venv/bin/python rebrand.py input.pdf [output.pdf]`
 2. Redacts both bands, which really deletes the old text, logos and lines
    instead of hiding them under a white box.
 3. Draws the Componder logo, the "LABORATORY TEST REPORT" band and the company footer.
-   The lab's clinical notes ("electronically authenticated… printed date", "NOTE : Assay
-   results…") are carried over word for word. The lab's "Processed at…" address line
-   and anything naming the lab are dropped.
+   The lab's footer lines ("electronically authenticated… printed date", "NOTE : Assay
+   results…" and "Processed at <lab>, <address>…") are carried over word for word, so
+   the report still names the lab that did the test. Only the lab's own page numbers are
+   replaced.
 4. Integrity check: every word, image and drawing in the body is compared with
    the original. If anything differs, the file is rejected instead of produced.
 
