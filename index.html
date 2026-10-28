@@ -78,6 +78,11 @@ footer{background:var(--teal);color:#cfe9e1;font-size:13px}
 .foot nav{display:flex;gap:6px 18px;flex-wrap:wrap}
 .foot a{color:#fff;text-decoration:none} .foot a:hover{color:var(--mint)}
 .foot small{flex-basis:100%;color:#9fc4bb;font-size:12px;border-top:1px solid rgba(255,255,255,.12);padding-top:14px}
+#drop .touch{display:none}
+@media (hover:none) and (pointer:coarse){
+  #drop .mouse{display:none} #drop strong.touch{display:block} #drop span.touch{display:inline}
+  .foot nav{gap:0 18px} .foot nav a{padding:10px 0}
+}
 @media (max-width:560px){
   h1{font-size:22px} .home span{display:none} .home img{height:32px} .site{padding:6px 12px;font-size:13px}
   #drop{padding:36px 16px}
@@ -104,11 +109,13 @@ footer{background:var(--teal);color:#cfe9e1;font-size:13px}
   <label id="drop">
     <input id="pick" type="file" accept="application/pdf,.pdf" multiple hidden>
     <div class="plus">+</div>
-    <strong>Drop report PDFs here</strong>
-    <span>or click to choose · multiple files OK</span>
+    <strong class="mouse">Drop report PDFs here</strong>
+    <span class="mouse">or click to choose · multiple files OK</span>
+    <strong class="touch">Tap to choose report PDFs</strong>
+    <span class="touch">multiple files OK</span>
     <div class="labs"><em>Clinova</em><em>Thyrocare</em><em>Vijaya Diagnostics</em></div>
   </label>
-  <p class="note"><span>🔒</span><span><b>Files never leave this computer.</b> Conversion runs inside your
+  <p class="note"><span>🔒</span><span><b>Files never leave this device.</b> Conversion runs inside your
   browser, and nothing is uploaded. Every report is checked word for word before you can download it.</span></p>
 
   <div id="tools"><span id="summary"></span>
