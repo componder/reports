@@ -140,7 +140,7 @@ async function send(files){
     const r=document.createElement('div');r.className='row '+(it.ok?'ok':'bad');
     if(it.ok){
       okIds.push(it.id);
-      r.innerHTML=`<div class="name">${esc(it.out_name)}<div class="meta"><b>✓ Verified</b> · ${it.pages} page(s) · ${it.words} words &amp; ${it.images} images unchanged</div></div>
+      r.innerHTML=`<div class="name">${esc(it.out_name)}<div class="meta"><b>✓ Verified</b> · ${esc(it.lab)} · ${it.pages} page(s) · ${it.words} words &amp; ${it.images} images unchanged</div></div>
         <a class="btn ghost" target="_blank" href="/file/${it.id}">Preview</a>
         <a class="btn primary" href="/file/${it.id}?dl=1">Download</a>`;
     }else{

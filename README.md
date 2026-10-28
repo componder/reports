@@ -44,8 +44,25 @@ Command line, one file: `.venv/bin/python rebrand.py input.pdf [output.pdf]`
 4. Integrity check: every word, image and drawing in the body is compared with
    the original. If anything differs, the file is rejected instead of produced.
 
-Works with both the plain and the Clinova-letterhead versions of the report.
 If a PDF has a layout it doesn't recognise, it refuses the file instead of guessing.
+
+## Supported labs
+
+Each lab is a small class in `rebrand.py` (`Clinova`, `Vijaya`, `Thyrocare`), listed in `LABS`.
+
+- **Clinova**: plain and letterhead versions. Header above "Patient Name" is replaced.
+  The footer lines (authentication, NOTE, "Processed at Clinova…") are kept word for word.
+- **Vijaya Diagnostic Centre**: the whole letterhead is one full-page picture. It's deleted,
+  and the address line and "TEST REPORT" box are replaced. The footer gets the clinical note
+  ("* Suggested Clinical Correlation…") and "Processed at Vijaya Diagnostic Centre, <address
+  from the report>".
+- **Thyrocare**: plain and `_RLS` versions. The lab's "Processed At" block and NABL/CAP logos
+  stay. The Thyrocare logo/banner (in `_RLS`) is replaced, and the Thyrocare cover and back
+  pages of `_RLS` are dropped. The footer is compact because signatures run close to the bottom.
+
+To add a lab: write a class with `name`, `matches(doc)`, `pages(doc)`, `plan(page)` (and
+optionally `prepare(page)`), add it to `LABS`, then run sample reports through
+`rebrand.py` on the command line and in the browser.
 
 ## Branding
 

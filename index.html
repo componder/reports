@@ -44,6 +44,9 @@ h1{font-size:26px;line-height:1.25;margin:0 0 6px;font-weight:700;letter-spacing
 #drop:hover,#drop.over{border-color:var(--mint);background:var(--mint-soft)}
 #drop strong{display:block;font-size:17px;font-weight:600;margin-bottom:4px}
 #drop span{color:var(--muted);font-size:14px}
+.labs{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:16px}
+.labs em{font-style:normal;font-size:12px;font-weight:600;color:var(--teal);background:var(--mint-soft);
+  border-radius:999px;padding:4px 12px}
 .plus{width:44px;height:44px;margin:0 auto 14px;border-radius:12px;background:var(--mint);color:var(--teal);
   display:grid;place-items:center;font-size:26px;font-weight:700}
 .note{display:flex;gap:10px;font-size:13px;color:var(--muted);margin:14px 2px 0}
@@ -103,6 +106,7 @@ footer{background:var(--teal);color:#cfe9e1;font-size:13px}
     <div class="plus">+</div>
     <strong>Drop report PDFs here</strong>
     <span>or click to choose · multiple files OK</span>
+    <div class="labs"><em>Clinova</em><em>Thyrocare</em><em>Vijaya Diagnostics</em></div>
   </label>
   <p class="note"><span>🔒</span><span><b>Files never leave this computer.</b> Conversion runs inside your
   browser, and nothing is uploaded. Every report is checked word for word before you can download it.</span></p>
@@ -148,8 +152,9 @@ worker.onmessage = ({ data }) => {
     const url = URL.createObjectURL(blob);
     done.push({ name: outName, blob });
     row.className = "row ok";
-    row.innerHTML = `<div class="name">${esc(outName)}<div class="meta"><b>✓ Verified</b> · ${r.pages} page(s) ·
-      ${r.words} words &amp; ${r.images} images unchanged</div></div>
+    const dropped = r.dropped ? ` · ${r.dropped} ${esc(r.lab)} cover/back page(s) removed` : "";
+    row.innerHTML = `<div class="name">${esc(outName)}<div class="meta"><b>✓ Verified</b> · ${esc(r.lab)} ·
+      ${r.pages} page(s) · ${r.words} words &amp; ${r.images} images unchanged${dropped}</div></div>
       <div class="acts"><a class="btn ghost" target="_blank" href="${url}">Preview</a>
       <a class="btn primary" href="${url}" download="${esc(outName)}">Download</a></div>`;
   } else {
