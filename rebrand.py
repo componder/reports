@@ -26,8 +26,8 @@ LOGO = ASSETS / "logo.png"
 BRAND = {
     "band_text": "LABORATORY TEST REPORT",
     "company": "COMPONDER HEALTH CARE PRIVATE LIMITED",
-    "address": "1-7-749/A/B, Brahmamagari Khaman, Mohan Nagar, Ramnagar, "
-               "Hyderabad - 500020, Mobile Number : 96424 96494",
+    "address": "H No. 1-7-949 to 956, 4th Flr, Above Indianbank, Zamistanpur, Musheerabad, "
+               "Hyderabad - 500020, Telangana, Mobile Number : 96424 96494",
 }
 
 # Colours sampled from the Componder letterhead.
