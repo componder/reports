@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Componder Reports</title>
+<link rel="icon" href="assets/componder-logo-light.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#00455a; --mint:#58cca8; --mint-soft:#e6f6f0; --cream:#f6f4ed;
+  --card:#fff; --ink:#0f2a33; --muted:#5b6f75; --line:#e3e6e1;
+  --ok:#1b8a63; --bad:#c0392b;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:var(--cream);color:var(--ink);
+  font:15px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:var(--teal)}
+.bar{max-width:880px;margin:0 auto;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.bar img{height:38px;display:block}
+.bar span{color:#cfe9e1;font-size:13px;font-weight:500;letter-spacing:.02em}
+main{flex:1;width:100%;max-width:880px;margin:0 auto;padding:36px 16px 48px}
+h1{font-size:26px;line-height:1.25;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
+.lead{margin:0 0 24px;color:var(--muted)}
+#status{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--muted);
+  background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;margin-bottom:16px}
+#status i{width:8px;height:8px;border-radius:50%;background:#e0b341}
+#status.ready i{background:var(--mint)} #status.failed i{background:var(--bad)}
+#drop{display:block;background:var(--card);border:2px dashed #b9d8cd;border-radius:16px;padding:48px 20px;
+  text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+#drop:hover,#drop.over{border-color:var(--mint);background:var(--mint-soft)}
+#drop strong{display:block;font-size:17px;font-weight:600;margin-bottom:4px}
+#drop span{color:var(--muted);font-size:14px}
+.plus{width:44px;height:44px;margin:0 auto 14px;border-radius:12px;background:var(--mint);color:var(--teal);
+  display:grid;place-items:center;font-size:26px;font-weight:700}
+.note{display:flex;gap:10px;font-size:13px;color:var(--muted);margin:14px 2px 0}
+.note b{color:var(--teal);font-weight:600}
+#tools{display:none;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:32px 0 12px}
+#tools.show{display:flex}
+#summary{font-weight:600}
+#results{display:flex;flex-direction:column;gap:10px}
+.row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.row .name{flex:1;min-width:0;font-weight:600;overflow-wrap:anywhere}
+.row .meta{font-size:13px;color:var(--muted);font-weight:400;margin-top:2px}
+.ok .meta b{color:var(--ok)} .bad .meta b{color:var(--bad)}
+.acts{display:flex;gap:8px}
+.btn{border:0;border-radius:10px;padding:9px 16px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+  text-decoration:none;display:inline-block;white-space:nowrap}
+.btn.primary{background:var(--teal);color:#fff} .btn.primary:hover{background:#00384a}
+.btn.ghost{background:var(--mint-soft);color:var(--teal)} .btn.ghost:hover{background:#d4efe5}
+.spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--teal);border-radius:50%;
+  animation:s .9s linear infinite;flex:none}
+@keyframes s{to{transform:rotate(360deg)}}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:20px 16px 28px}
+@media (max-width:560px){
+  h1{font-size:22px} .bar span{display:none} #drop{padding:36px 16px}
+  .acts{width:100%} .acts .btn{flex:1;text-align:center}
+}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <img src="assets/componder-logo-light.svg" alt="Componder · At your door step">
+  <span>Lab report branding</span>
+</div></header>
+
+<main>
+  <h1>Brand partner lab reports</h1>
+  <p class="lead">Drop the lab's PDFs and get Componder-branded reports back. Header and footer are swapped,
+  and the results, signatures and QR code stay exactly as they were.</p>
+
+  <div id="status"><i></i><span>Preparing converter…</span></div>
+
+  <label id="drop">
+    <input id="pick" type="file" accept="application/pdf,.pdf" multiple hidden>
+    <div class="plus">+</div>
+    <strong>Drop report PDFs here</strong>
+    <span>or click to choose · multiple files OK</span>
+  </label>
+  <p class="note"><span>🔒</span><span><b>Files never leave this computer.</b> Conversion runs inside your
+  browser, and nothing is uploaded. Every report is checked word for word before you can download it.</span></p>
+
+  <div id="tools"><span id="summary"></span><button id="zip" class="btn primary">Download all (.zip)</button></div>
+  <div id="results"></div>
+</main>
+
+<footer>Componder Health Care Private Limited · Internal tool</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const drop = $("drop"), pick = $("pick"), results = $("results"), statusEl = $("status");
+const worker = new Worker("worker.js");
+const pending = new Map();   // id -> {row, name}
+const done = [];             // {name, blob}
+let seq = 0;
+
+const setStatus = (cls, text) => { statusEl.className = cls; statusEl.lastElementChild.textContent = text; };
+setStatus("", "Preparing converter… (first visit downloads ~25 MB, then it's cached)");
+
+worker.onmessage = ({ data }) => {
+  if (data.type === "ready") return setStatus("ready", "Ready");
+  if (data.type === "failed") return setStatus("failed", "Converter failed to load. Check the internet connection and reload.");
+  const { row, name } = pending.get(data.id);
+  pending.delete(data.id);
+  const r = data.result;
+  if (r.ok) {
+    const outName = "Componder_" + name.replace(/\.pdf$/i, "") + ".pdf";
+    const blob = new Blob([data.pdf], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    done.push({ name: outName, blob });
+    row.className = "row ok";
+    row.innerHTML = `<div class="name">${esc(outName)}<div class="meta"><b>✓ Verified</b> · ${r.pages} page(s) ·
+      ${r.words} words &amp; ${r.images} images unchanged</div></div>
+      <div class="acts"><a class="btn ghost" target="_blank" href="${url}">Preview</a>
+      <a class="btn primary" href="${url}" download="${esc(outName)}">Download</a></div>`;
+  } else {
+    row.className = "row bad";
+    row.innerHTML = `<div class="name">${esc(name)}<div class="meta"><b>✗ Not converted</b> · ${esc(r.error)}</div></div>`;
+  }
+  $("tools").classList.toggle("show", done.length > 0);
+  $("summary").textContent = `${done.length} report${done.length === 1 ? "" : "s"} ready`;
+};
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+async function add(files) {
+  for (const f of [...files].filter(f => f.name.toLowerCase().endsWith(".pdf"))) {
+    const id = ++seq, row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `<span class="spin"></span><div class="name">${esc(f.name)}<div class="meta">Converting…</div></div>`;
+    results.prepend(row);
+    pending.set(id, { row, name: f.name });
+    const buf = await f.arrayBuffer();
+    worker.postMessage({ id, buf }, [buf]);
+  }
+}
+
+["dragenter", "dragover"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", ev => add(ev.dataTransfer.files));
+pick.addEventListener("change", () => { add(pick.files); pick.value = ""; });
+
+$("zip").addEventListener("click", async () => {
+  const zip = new JSZip();
+  done.forEach(d => zip.file(d.name, d.blob));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(await zip.generateAsync({ type: "blob" }));
+  a.download = "Componder_Reports.zip";
+  a.click();
+});
+</script>
+</body>
+</html>

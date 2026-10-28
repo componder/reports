@@ -3,7 +3,20 @@
 Swaps the partner lab's header and footer on report PDFs for Componder branding.
 The report body, signatures and QR code are left untouched.
 
-## Run
+## Web version (GitHub Pages)
+
+`index.html` + `worker.js` run the same `rebrand.py` inside the browser using
+Pyodide 0.28.3 (PyMuPDF 1.26.3). Nothing is uploaded: PDFs are processed on the
+user's computer. The first visit downloads ~25 MB, which the browser then caches.
+Any static host works. To test locally:
+
+```
+python3 -m http.server 8000      # then open http://127.0.0.1:8000
+```
+
+Changes to `rebrand.py` or `assets/logo.png` go live on the site as soon as they're pushed.
+
+## Run locally (Flask)
 
 ```
 .venv/bin/python app.py        # then open http://127.0.0.1:5050
