@@ -4,8 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#00455a">
+<meta name="description" content="Brand partner lab reports with Componder's header and footer. Runs in your browser, nothing is uploaded.">
+<meta property="og:title" content="Componder Reports">
+<meta property="og:description" content="Brand partner lab reports with Componder's header and footer. Runs in your browser, nothing is uploaded.">
 <title>Componder Reports</title>
-<link rel="icon" href="assets/componder-logo-light.svg">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,10 +23,15 @@
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:var(--cream);color:var(--ink);
   font:15px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
-header{background:var(--teal)}
-.bar{max-width:880px;margin:0 auto;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.bar img{height:38px;display:block}
-.bar span{color:#cfe9e1;font-size:13px;font-weight:500;letter-spacing:.02em}
+a{color:inherit}
+header{background:var(--teal);position:sticky;top:0;z-index:5}
+.bar{max-width:880px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:14px}
+.home{display:flex;align-items:center;gap:14px;text-decoration:none;margin-right:auto;min-width:0}
+.home img{height:38px;display:block}
+.home span{color:#cfe9e1;font-size:13px;font-weight:500;padding-left:14px;border-left:1px solid rgba(255,255,255,.22);white-space:nowrap}
+.site{color:#fff;text-decoration:none;font-size:14px;font-weight:600;border:1.5px solid var(--mint);border-radius:999px;
+  padding:7px 16px;white-space:nowrap;transition:background .15s,color .15s}
+.site:hover{background:var(--mint);color:var(--teal)}
 main{flex:1;width:100%;max-width:880px;margin:0 auto;padding:36px 16px 48px}
 h1{font-size:26px;line-height:1.25;margin:0 0 6px;font-weight:700;letter-spacing:-.01em}
 .lead{margin:0 0 24px;color:var(--muted)}
@@ -49,24 +58,37 @@ h1{font-size:26px;line-height:1.25;margin:0 0 6px;font-weight:700;letter-spacing
 .row .meta{font-size:13px;color:var(--muted);font-weight:400;margin-top:2px}
 .ok .meta b{color:var(--ok)} .bad .meta b{color:var(--bad)}
 .acts{display:flex;gap:8px}
-.btn{border:0;border-radius:10px;padding:9px 16px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+.btn{border:0;border-radius:999px;padding:9px 18px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;
   text-decoration:none;display:inline-block;white-space:nowrap}
 .btn.primary{background:var(--teal);color:#fff} .btn.primary:hover{background:#00384a}
 .btn.ghost{background:var(--mint-soft);color:var(--teal)} .btn.ghost:hover{background:#d4efe5}
 .spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--teal);border-radius:50%;
   animation:s .9s linear infinite;flex:none}
 @keyframes s{to{transform:rotate(360deg)}}
-footer{color:var(--muted);font-size:12px;text-align:center;padding:20px 16px 28px}
+#tools .acts{align-items:center}
+.btn.link{background:none;color:var(--muted);padding:9px 10px}
+.btn.link:hover{color:var(--teal)}
+footer{background:var(--teal);color:#cfe9e1;font-size:13px}
+.foot{max-width:880px;margin:0 auto;padding:22px 16px;display:flex;align-items:center;gap:12px 24px;flex-wrap:wrap}
+.foot .co{display:flex;align-items:center;gap:10px;margin-right:auto}
+.foot .co img{width:26px;height:26px;display:block}
+.foot nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.foot a{color:#fff;text-decoration:none} .foot a:hover{color:var(--mint)}
+.foot small{flex-basis:100%;color:#9fc4bb;font-size:12px;border-top:1px solid rgba(255,255,255,.12);padding-top:14px}
 @media (max-width:560px){
-  h1{font-size:22px} .bar span{display:none} #drop{padding:36px 16px}
+  h1{font-size:22px} .home span{display:none} .home img{height:32px} .site{padding:6px 12px;font-size:13px}
+  #drop{padding:36px 16px}
   .acts{width:100%} .acts .btn{flex:1;text-align:center}
 }
 </style>
 </head>
 <body>
 <header><div class="bar">
-  <img src="assets/componder-logo-light.svg" alt="Componder · At your door step">
-  <span>Lab report branding</span>
+  <a class="home" href="https://componder.github.io/reports/" title="Componder Reports home">
+    <img src="assets/componder-logo-light.svg" alt="Componder · At your door step">
+    <span>Lab Reports</span>
+  </a>
+  <a class="site" href="https://componder.in" target="_blank" rel="noopener">componder.in ↗</a>
 </div></header>
 
 <main>
@@ -85,11 +107,22 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:20px 16px 28p
   <p class="note"><span>🔒</span><span><b>Files never leave this computer.</b> Conversion runs inside your
   browser, and nothing is uploaded. Every report is checked word for word before you can download it.</span></p>
 
-  <div id="tools"><span id="summary"></span><button id="zip" class="btn primary">Download all (.zip)</button></div>
+  <div id="tools"><span id="summary"></span>
+    <div class="acts"><button id="clear" class="btn link">Clear list</button>
+    <button id="zip" class="btn primary">Download all (.zip)</button></div></div>
   <div id="results"></div>
 </main>
 
-<footer>Componder Health Care Private Limited · Internal tool</footer>
+<footer><div class="foot">
+  <div class="co"><img src="assets/icon.svg" alt=""><span>Componder Health Care Private Limited</span></div>
+  <nav>
+    <a href="https://componder.in" target="_blank" rel="noopener">componder.in</a>
+    <a href="https://componder.in/contact-us" target="_blank" rel="noopener">Contact</a>
+    <a href="tel:+919642496494">+91 96424 96494</a>
+    <a href="https://componder.in/privacy-policy/" target="_blank" rel="noopener">Privacy policy</a>
+  </nav>
+  <small>Internal tool for Componder staff. Reports are processed on this device and never uploaded.</small>
+</div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
@@ -145,6 +178,15 @@ async function add(files) {
 ["dragleave", "drop"].forEach(e => drop.addEventListener(e, ev => { ev.preventDefault(); drop.classList.remove("over"); }));
 drop.addEventListener("drop", ev => add(ev.dataTransfer.files));
 pick.addEventListener("change", () => { add(pick.files); pick.value = ""; });
+
+$("clear").addEventListener("click", () => {
+  results.querySelectorAll(".row.ok,.row.bad").forEach(r => {
+    r.querySelectorAll("a[href^='blob:']").forEach(a => URL.revokeObjectURL(a.href));
+    r.remove();
+  });
+  done.length = 0;
+  $("tools").classList.remove("show");
+});
 
 $("zip").addEventListener("click", async () => {
   const zip = new JSZip();
