@@ -36,8 +36,9 @@ BAND_Y = (85.2, 98.4)
 BAND_TEXT_WIDTH = 190
 FOOTER_RULE_Y = 790.0
 NOTE_BASELINES = (797.2, 803.7, 810.8)
-COMPANY_BASELINE = 821.5
-ADDRESS_BASELINE = 831.5
+NOTES_SEPARATOR_Y = 814.4
+COMPANY_BASELINE = 824.0
+ADDRESS_BASELINE = 833.2
 
 # Lab footer lines we redraw ourselves instead of carrying over.
 DROP_FOOTER_LINES = ("Page ",)
@@ -184,13 +185,16 @@ def draw_footer(page, page_no, page_count, notes):
     for (text, size), baseline in zip(notes, NOTE_BASELINES):
         page.insert_text((26.5, baseline), text, fontname="helv",
                          fontsize=min(size, 5.8), color=TEXT)
+    # Dotted rule between the lab's lines and the Componder name/address.
+    page.draw_line((26.5, NOTES_SEPARATOR_Y), (w - 24, NOTES_SEPARATOR_Y),
+                   color=GREY_LINE, width=0.6, dashes="[1 1.6] 0", lineCap=1)
     size = 4.95
     label = f"Page {page_no} of {page_count}"
     lw = pymupdf.get_text_length(label, fontname="helv", fontsize=size)
     page.insert_text((w - 24 - lw, NOTE_BASELINES[0]), label, fontname="helv",
                      fontsize=size, color=TEXT)
-    _centered(page, BRAND["company"], COMPANY_BASELINE, "hebo", 9.0, TEXT, w - 60)
-    _centered(page, BRAND["address"], ADDRESS_BASELINE, "helv", 8.6, TEXT, w - 70)
+    _centered(page, BRAND["company"], COMPANY_BASELINE, "hebo", 8.8, TEXT, w - 60)
+    _centered(page, BRAND["address"], ADDRESS_BASELINE, "helv", 8.4, TEXT, w - 70)
 
 
 def rebrand(pdf_bytes):
